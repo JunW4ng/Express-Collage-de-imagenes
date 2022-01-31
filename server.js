@@ -18,7 +18,8 @@ app.use(
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(express.static("imgs"));
+//? Carpeta imgs
+app.use(express.static("public"));
 
 //? Muestra formulario
 app.get("/", (_, res) => {
@@ -30,11 +31,12 @@ app.get("/collage", (_, res) => {
   res.sendFile(__dirname + "/collage.html");
 });
 
+//? Guarda imagen en carpeta
 app.post("/imagen", (req, res) => {
   const { target_file } = req.files;
   const { posicion } = req.body;
   const name = `imagen-${posicion}`;
-  target_file.mv(`${__dirname}/imgs/${name}.jpg`, (err) => {
+  target_file.mv(`${__dirname}/public/imgs/${name}.jpg`, (err) => {
     err
       ? res.send("Error al subir la imagen")
       : res.send("Imagen cargada con exito");
@@ -44,7 +46,7 @@ app.post("/imagen", (req, res) => {
 //? Elimina imagen
 app.get("/deleteImg/:nombre", (req, res) => {
   const { nombre } = req.params;
-  fs.unlink(`${__dirname}/imgs/${nombre}`, (err) => {
+  fs.unlink(`${__dirname}/public/imgs/${nombre}`, (err) => {
     err
       ? res.send("Error al eliminar la imagen")
       : res.send(`Imagen ${nombre} fue eliminada con exito`);
